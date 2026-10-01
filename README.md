@@ -1,59 +1,66 @@
-# GifSearch
+<div align="center">
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.24.
+# 🎞️ GIF Finder
 
-## Development server
+<p>Search, explore, and download GIFs with GIPHY.</p>
 
-To start a local development server, run:
+<p>
+  <a href="https://github.com/aliveagain3228/gif-search">
+    <img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Repository" />
+  </a>
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white" alt="Angular" />
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/RxJS-7.8-B7178C?style=for-the-badge&logo=reactivex&logoColor=white" alt="RxJS" />
+  <img src="https://img.shields.io/badge/GIPHY_API-Search-00CC99?style=for-the-badge&logo=giphy&logoColor=white" alt="GIPHY API" />
+  <img src="https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+</p>
+
+</div>
+
+## About
+
+GIF Finder is a single-page application for searching and exploring GIF animations. It uses the GIPHY API to find GIFs by keyword.
+
+Search terms are stored in the URL, so you can refresh the page or share a search using its link.
+
+## Features
+
+- 🔎 Search GIFs by keyword
+- 🔗 Keep the search query in the URL
+- ↕️ Sort results by relevance or newest
+- 🖼️ View GIF details, including creator, date, description, and source
+- 📋 Copy a GIF link to the clipboard
+- ⬇️ Download a GIF
+- 📱 Responsive layout
+- ⏳ Loading, error, and empty-result states
+
+The app requests up to 24 results per search and uses G-rated content.
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Angular 21 | Application framework |
+| TypeScript | Application logic and types |
+| RxJS | API requests and reactive data flow |
+| Angular Signals | Component state |
+| SCSS | Styling |
+| GIPHY API | GIF search and metadata |
+| Vercel | Deployment |
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- npm
+
+### Installation
 
 ```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+git clone https://github.com/aliveagain3228/gif-search.git
+cd gif-search
+npm install
