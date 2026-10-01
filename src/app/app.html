@@ -17,9 +17,10 @@
 
   <form class="search-form" (ngSubmit)="submitSearch()">
     <label class="visually-hidden" for="gif-search">
-      Gif Search
+      Search GIFs
     </label>
     <span class="search-icon" aria-hidden="true">⌕</span>
+
     <input
       id="gif-search"
       type="search"
@@ -29,7 +30,7 @@
       autocomplete="off"
     />
 
-    <button type="submit">Find Gif</button>
+    <button type="submit">Find GIFs</button>
   </form>
 
   @if (submittedQuery()) {
@@ -50,13 +51,52 @@
         <p class="eyebrow">SEARCH RESULTS</p>
         <h2>GIF on request «{{ submittedQuery() }}»</h2>
       </div>
+
+      @if (gifs().length > 0) {
+        <label class="sort-control">
+          <span>Sort by</span>
+          <select name="sortMode" [ngModel]="sortMode()" (ngModelChange)="updateSortMode($event)">
+            <option value="relevance">Relevance</option>
+            <option value="newest">Newest</option>
+          </select>
+        </label>
+      }
     </div>
 
-    <div class="empty-state">
-      <span class="empty-state-icon" aria-hidden="true">✦</span>
-      <h3></h3>
-      <p></p>
-    </div>
+    @if (isLoading()) {
+      <div class="empty-state">
+        <span class="empty-state-icon" aria-hidden="true">...</span>
+        <h3>Loading GIFs</h3>
+        <p>Searching for the right reaction.</p>
+      </div>
+    } @else if (errorMessage()) {
+      <div class="empty-state" role="alert">
+        <span class="empty-state-icon" aria-hidden="true">!</span>
+        <h3>Something went wrong</h3>
+        <p>{{ errorMessage() }}</p>
+      </div>
+    } @else if (gifs().length > 0) {
+      <div class="gif-grid">
+        @for (gif of sortedGifs(); track gif.id) {
+          <a
+            class="gif-card"
+            [href]="gif.pageUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="'Open GIF: ' + gif.title"
+          >
+            <img [src]="gif.previewUrl" [alt]="gif.title" loading="lazy"/>
+            <span class="gif-card-title">{{ gif.title }}</span>
+          </a>
+        }
+      </div>
+    } @else {
+      <div class="empty-state">
+        <span class="empty-state-icon" aria-hidden="true">✦</span>
+        <h3>No GIFs found</h3>
+        <p>Try another search term</p>
+      </div>
+    }
   } @else {
     <div class="welcome-state">
       <span class="welcome-state-icon" aria-hidden="true">✳</span>
@@ -71,4 +111,6 @@
   <span>Search for animations in one place</span>
 </footer>
 </main>
+
+
 <router-outlet />
