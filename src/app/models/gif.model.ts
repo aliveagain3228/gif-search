@@ -5,5 +5,6 @@ export interface  Gif {
   originalUrl: string;
   pageUrl: string;
   creator: string;
-  createdAt: string
+  createdAt: string;
+  source: string;
 }

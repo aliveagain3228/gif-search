@@ -13,7 +13,11 @@ interface GiphyGifResponse {
   title: string;
   url: string;
   import_datetime: string;
+  create_datetime: string;
+  update_datetime: string;
   username: string;
+  alt_text?: string;
+  source?: string
   user?: {
     display_name?: string;
   };
@@ -51,11 +55,13 @@ export class GiphyApiService {
             response.data.map((gif) => ({
               id: gif.id,
               title: gif.title,
+              altText: gif.alt_text || gif.title || 'No description available.',
               previewUrl: gif.images.fixed_width.webp ?? gif.images.fixed_width.url,
               originalUrl: gif.images.original.url,
               pageUrl: gif.url,
               creator: gif.user?.display_name || gif.username || 'Unknown',
               createdAt: gif.import_datetime,
+              source: gif.source || gif.url,
             }))
         )
       )
