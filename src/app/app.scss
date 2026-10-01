@@ -1,6 +1,5 @@
 :host {
   display: block;
-  min-height: 100vh;
   color: #eef4ff;
   background:
     radial-gradient(ellipse at 50% -25%, rgba(37, 99, 235, 0.2), transparent 55%),
@@ -338,6 +337,10 @@ p {
   border: 0;
   color: #eef4ff;
   background: transparent;
+}
+
+.gif-dialog:not([open]) {
+  display: none;
 }
 
 .gif-dialog::backdrop {
