@@ -2,14 +2,14 @@ import { DatePipe } from '@angular/common';
 import {Component, ElementRef, DestroyRef, OnInit, ViewChild, signal, inject, computed } from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import {RouterOutlet, ActivatedRoute, Router, RouterLinkActive, RouterLink} from '@angular/router';
+import {RouterOutlet, ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {GiphyApiService} from './core/giphy-api.service';
 import { Gif} from './models/gif.model';
 import { catchError, distinctUntilChanged, finalize, map, of, switchMap, tap} from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule, RouterLinkActive, RouterLink],
+  imports: [RouterOutlet, FormsModule, RouterLink, DatePipe],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
@@ -129,18 +129,18 @@ export class App implements  OnInit{
         throw new Error('The GIF download failed')
       }
 
-      const file = await.response.blob()
+      const file = await response.blob()
       const downloadUrl = URL.createObjectURL(file)
       const link = document.createElement('a')
       const fileName = gif.title.replace(/[<>:"/\\|?*\u0000-\u001F]/g, '')
-        .trim().replace(/\s+/g, '-') || 'gif')
+        .trim().replace(/\s+/g, '-') || 'gif'
 
-      link.hreflang = downloadUrl
+      link.href = downloadUrl
       link.download = `${fileName}.gif`
       document.body.append(link)
       link.click()
       link.remove()
-      URL.revokeObjectURL(downloadUrl)
+      window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000)
       this.actionMessage.set('Download started')
     } catch {
       this.actionMessage.set('Direct download was blocked. Use “View on GIPHY”, then save the GIF from there')

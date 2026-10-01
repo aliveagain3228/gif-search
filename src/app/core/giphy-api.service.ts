@@ -23,7 +23,8 @@ interface GiphyGifResponse {
   };
   images: {
     fixed_width: GiphyImage;
-    original: GiphyImage;
+    original?: GiphyImage;
+    downsized: GiphyImage;
   }
 }
 
@@ -49,21 +50,47 @@ export class GiphyApiService {
       .set('rating', 'g')
       .set('lang', 'en')
 
-    return this.http.get<GiphySearchResponse>(this.endpoint, { params })
+    return this.http
+      .get<GiphySearchResponse>(this.endpoint, { params })
       .pipe(
         map((response) =>
-            response.data.map((gif) => ({
-              id: gif.id,
-              title: gif.title,
-              altText: gif.alt_text || gif.title || 'No description available.',
-              previewUrl: gif.images.fixed_width.webp ?? gif.images.fixed_width.url,
-              originalUrl: gif.images.original.url,
-              pageUrl: gif.url,
-              creator: gif.user?.display_name || gif.username || 'Unknown',
-              createdAt: gif.import_datetime,
-              source: gif.source || gif.url,
-            }))
+          response.data.flatMap((gif) => {
+            const originalUrl =
+              gif.images.original?.url ?? gif.images.downsized?.url;
+            const previewUrl =
+              gif.images.fixed_width?.webp ??
+              gif.images.fixed_width?.url ??
+              originalUrl;
+
+            if (!originalUrl || !previewUrl) {
+              return [];
+            }
+
+            return [
+              {
+                id: gif.id,
+                title: gif.title || 'Untitled GIF',
+                altText:
+                  gif.alt_text ||
+                  gif.title ||
+                  'No description available.',
+                previewUrl,
+                originalUrl,
+                pageUrl: gif.url,
+                creator:
+                  gif.user?.display_name ||
+                  gif.username ||
+                  'Unknown creator',
+                createdAt:
+                  gif.import_datetime ||
+                  gif.create_datetime ||
+                  gif.update_datetime ||
+                  '',
+                source: gif.source || gif.url
+              }
+            ];
+          })
         )
-      )
+      );
   }
 }

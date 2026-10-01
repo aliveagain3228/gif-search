@@ -46,7 +46,7 @@
 
 <section class="results" aria-live="polite">
   @if (submittedQuery()) {
-    <div class="result-heading">
+    <div class="results-heading">
       <div>
         <p class="eyebrow">SEARCH RESULTS</p>
         <h2>GIF on request «{{ submittedQuery() }}»</h2>
@@ -78,16 +78,15 @@
     } @else if (gifs().length > 0) {
       <div class="gif-grid">
         @for (gif of sortedGifs(); track gif.id) {
-          <a
+          <button
             class="gif-card"
-            [href]="gif.pageUrl"
-            target="_blank"
-            rel="noopener noreferrer"
+            type="button"
+            (click)="openGifDetails(gif)"
             [attr.aria-label]="'Open GIF: ' + gif.title"
           >
-            <img [src]="gif.previewUrl" [alt]="gif.title" loading="lazy"/>
+            <img [src]="gif.previewUrl" [alt]="gif.altText" loading="lazy"/>
             <span class="gif-card-title">{{ gif.title }}</span>
-          </a>
+          </button>
         }
       </div>
     } @else {
@@ -108,9 +107,70 @@
 
 <footer class="footer">
   <span>GIF Finder</span>
-  <span>Search for animations in one place</span>
+  <a href="https://giphy.com" target="_blank" rel="noopener noreferrer">Powered by GIPHY</a>
 </footer>
 </main>
+
+<dialog
+  #gifDialog
+  class="gif-dialog"
+  aria-labelledby="gif-dialog-title"
+  (click)="closeDialogOnBackdrop($event)"
+  (close)="onDialogClosed()"
+>
+  @if (selectedGif(); as gif) {
+    <section class="details-panel" (click)="$event.stopPropagation()">
+      <button class="dialog-close" type="button" aria-label="Close GIF details" (click)="closedGifDetails()">×</button>
+      <img class="details-image" [src]="gif.originalUrl" [alt]="gif.altText"/>
+      <div class="details-info">
+        <p class="eyebrow">GIF DETAILS</p>
+        <h2 id="gif-dialog-title">{{ gif.title }}</h2>
+        <dl class="details-list">
+          <div>
+            <dt>Creator</dt>
+            <dd>{{ gif.creator }}</dd>
+          </div>
+
+          <div>
+            <dt>Created / Uploaded</dt>
+            <dd>
+              @if (gif.createdAt) {
+                {{ gif.createdAt | date: 'longDate'}}
+              } @else {
+                Not available
+              }
+            </dd>
+          </div>
+
+          <div>
+            <dt>Description</dt>
+            <dd>{{ gif.altText }}</dd>
+          </div>
+
+          <div>
+            <dt>Source</dt>
+            <dd>
+              <a [href]="gif.source" target="_blank" rel="noopener noreferrer">
+                Open source
+              </a>
+            </dd>
+          </div>
+        </dl>
+
+        <div class="details-actions">
+          <button type="button" (click)="copyGifLink(gif)">Copy GIF link</button>
+          <button type="button" (click)="downloadGif(gif)">Download GIF</button>
+          <a [href]="gif.pageUrl" target="_blank" rel="noopener noreferrer">View on GIPHY</a>
+        </div>
+
+        @if (actionMessage()) {
+          <p class="action-message" role="status">{{ actionMessage() }}</p>
+        }
+
+      </div>
+    </section>
+  }
+</dialog>
 
 
 <router-outlet />
